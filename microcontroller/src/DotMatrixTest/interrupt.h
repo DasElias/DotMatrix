@@ -3,8 +3,10 @@
 
 #include <avr/io.h>
 
-#define RUNNING_TEXT_STATE 1
-#define COUNT_FROM_ZERO_TO_NINE 2
+#define DISPLAY_RUNNING_TEXT 1
+#define DISPLAY_NUMBERS 2
+#define DISPLAY_CHARACTERS 3
+#define DISPLAY_USART_PATTERN 4
 
 void interrupt_init(void);
 int8_t getActiveStatus();
