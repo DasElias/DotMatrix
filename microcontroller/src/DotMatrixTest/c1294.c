@@ -87,7 +87,7 @@ void c1294_display_2darray_8x8(uint8_t array[C1294_ROWS][C1294_COLS]) {
 }
 
 
-void c1294_display_running_text(uint8_t textWidth, uint8_t* textArray, uint8_t* p_startIndex, uint8_t* p_width, uint8_t* p_offset) {	
+/*void c1294_display_running_text(uint8_t textWidth, uint8_t* textArray, uint8_t* p_startIndex, uint8_t* p_width, uint8_t* p_offset) {	
 	if((* p_offset) > 0) {
 		(* p_offset)--;
 		(* p_width)++;
@@ -116,6 +116,35 @@ void c1294_display_running_text(uint8_t textWidth, uint8_t* textArray, uint8_t* 
 	}
 	
 	c1294_display_2darray_8x8(temp);
+}*/
+
+void c1294_display_running_text(uint8_t textWidth, uint8_t* textArray, uint8_t* p_startIndex, uint8_t* p_width, uint8_t* p_offset) {
+	if((* p_offset) > 0) {
+		(* p_offset)--;
+		(* p_width)++;
+	} else {
+		(*p_startIndex)++;
+	}
+	
+	if((* p_startIndex) + 8 >= textWidth) {
+		(*p_width)--;
+	}
+	if((* p_startIndex) == textWidth) {
+		(* p_startIndex) = 0;
+		(* p_width) = 0;
+		(* p_offset) = 8;
+	}
+	
+	uint8_t temp[C1294_COLS];
+	for(int x = 0; x < C1294_COLS; x++) {
+		if(x > (* p_width) + (* p_offset) || x < (* p_offset)) temp[x] = 0;
+		else {
+			uint8_t textArray_x = (* p_startIndex) + x - (* p_offset);
+			temp[x] = textArray[textArray_x];
+		}
+	}
+	
+	c1294_display_1darray_8x8(temp);
 }
 
 
