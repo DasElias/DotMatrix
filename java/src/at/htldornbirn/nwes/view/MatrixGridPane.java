@@ -30,7 +30,6 @@ public class MatrixGridPane extends JPanel {
 				ledButtons[indexInModel] = button;
 
 				button.addMouseListener(new GridPaneMouseListener(indexInModel));
-				button.setText(indexInGridPane + "/" + indexInModel);
 
 				buttonsInGridPaneOrder[indexInGridPane] = button;
 			}
