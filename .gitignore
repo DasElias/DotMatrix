@@ -1,2 +1,4 @@
 .vs/
-DotMatrix/Debug/
+Debug/
+.idea/
+java/out/
