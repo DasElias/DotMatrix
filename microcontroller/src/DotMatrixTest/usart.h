@@ -47,21 +47,6 @@ extern "C"
 /// </remarks>
 void usart_init(void);
 
-/// <summary>Receive complete.</summary>
-/// <remarks>
-/// Checks if a new data byte has been received.
-/// </remarks>
-/// <returns>True if a data byte has been received.</returns>
-uint8_t usart_receive_complete(void);
-
-/// <summary>Receive data.</summary>
-/// <remarks>
-/// Waits until a byte of data has been received and returns it.
-/// </remarks>
-/// <returns>The data received.</returns>
-uint8_t usart_receive(void);
-
-
 #ifdef __cplusplus
 }
 #endif
