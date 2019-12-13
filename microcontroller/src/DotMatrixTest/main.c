@@ -13,16 +13,6 @@
 #include "interrupt.h"
 #define ARRAY_WIDTH 19
 
-#define CAPACITY 8
-
-
-// Variables which are changed by interrupts must be declared as volatile.
-volatile uint8_t buf1[8];
-volatile uint8_t buf2[8];
-
-volatile uint8_t* readBuffer = buf1;
-volatile uint8_t* writeBuffer = buf2;
-
 
 int main(void) {	
 	/*uint8_t arr[8][19] = {
@@ -69,47 +59,32 @@ int main(void) {
 	
 	while(1) {		
 		int8_t activeState = getActiveStatus();
+		
 		if(activeState == DISPLAY_RUNNING_TEXT) {
 			c1294_display_running_text(ARRAY_WIDTH, oneDimensionalArray, &startIndex, &width, &offset);
 			_delay_ms(500);
 		} else if (activeState == DISPLAY_NUMBERS) {
-			/*numberToDisplay++;
-			if(numberToDisplay > 9) numberToDisplay = 0;*/
-			_delay_ms(500);
+			numberToDisplay++;
+			if(numberToDisplay > 9) numberToDisplay = 0;
+			c1294_display_number(numberToDisplay);
+			
+			_delay_ms(3000);
 		} else if (activeState == DISPLAY_CHARACTERS) {
 			//charToDisplay++;
 			if(charToDisplay > 0x46) {
 				charToDisplay = 0x41;	// A
 			}
 			c1294_display_character(charToDisplay);
+			
 			_delay_ms(500);
 		} else if (activeState == DISPLAY_USART_PATTERN) {
-			uint8_t temp[8] = {readBuffer[0], readBuffer[1], readBuffer[2], readBuffer[3], readBuffer[4], readBuffer[5], readBuffer[6], readBuffer[7]};
+			uint8_t temp[8];
+			usart_get_data(temp);
 			c1294_display_1darray_8x8(temp);
+			
 			_delay_ms(500);
 		}
-		
-		
-		//uint8_t temp[8] = {readBuffer[0], readBuffer[1], readBuffer[2], readBuffer[3], readBuffer[4], readBuffer[5], readBuffer[6], readBuffer[7]};
-		//c1294_display_1darray_8x8(temp);
-	/*	c1294_read_from_usart(usartValues);
-		c1294_display_1darray_8x8(usartValues);*/
-	
-		
-		//_delay_ms(1000);
 	}
-   
 }
 
-volatile uint8_t ctr = 0;
-ISR(USB_USART_RXC_vect){
-	writeBuffer[ctr] = USB_USART_MODULE.DATA;
-	ctr++;
-	if(ctr >= CAPACITY) {
-		ctr = 0;
-		volatile uint8_t* temp = writeBuffer;
-		writeBuffer = readBuffer;
-		readBuffer = temp;
-	}
-}
 

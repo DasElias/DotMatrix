@@ -34,6 +34,8 @@
 #define USART_BSCALE_gc -7
 #define USART_CONFIG (USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc)
 
+#define USART_AMOUNT_OF_BYTES 8
+
 
 #ifdef __cplusplus
 extern "C"
@@ -46,6 +48,8 @@ extern "C"
 /// line parameters can be specified by the predefined constants.
 /// </remarks>
 void usart_init(void);
+
+void usart_get_data(uint8_t data[USART_AMOUNT_OF_BYTES]);
 
 #ifdef __cplusplus
 }
