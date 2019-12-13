@@ -6,6 +6,24 @@
  */ 
 
 #include "c1294.h"
+#include "usart.h"
+
+uint8_t data[][8] = {
+	{0x00, 0xF8, 0x88, 0x88, 0x88, 0x88, 0xFB, 0x00},
+	{0x00, 0xFF, 0x19, 0x19, 0x19, 0x19, 0xE6, 0x00},
+	{
+		0x00, 0xE7, 0x18, 0x18, 0x18, 0x18, 0x24, 0x00
+	},
+	{
+		0x00, 0xFF, 0x18, 0x18, 0x18, 0x18, 0xEB, 0x00
+	},
+	{
+		0x00, 0xFF, 0x19, 0x19, 0x19, 0x19, 0x18, 0x00
+	},
+	{	
+		0x00, 0xFF, 0x88, 0x88, 0x88, 0x08, 0x08, 0x00
+	}
+};
 
 void c1294_transmit(uint8_t address, uint8_t data) {
 	spi_select_slave();
@@ -34,7 +52,7 @@ void c1294_display_off(void) {
 }
 
 void c1294_display_clear(void) {
-	uint8_t empty[C1294_COLS * C1294_ROWS] = {
+	uint8_t empty[C1294_COLS] = {
 		0, 0, 0, 0, 0, 0, 0, 0
 	};
 	c1294_display_1darray_8x8(empty);
@@ -69,3 +87,44 @@ void c1294_display_2darray_8x8(uint8_t array[C1294_ROWS][C1294_COLS]) {
 }
 
 
+void c1294_display_running_text(uint8_t textWidth, uint8_t* textArray, uint8_t* p_startIndex, uint8_t* p_width, uint8_t* p_offset) {	
+	if((* p_offset) > 0) {
+		(* p_offset)--;
+		(* p_width)++;
+	} else {
+		(*p_startIndex)++;
+	}
+	
+	if((* p_startIndex) + 8 >= textWidth) {
+		(*p_width)--;
+	}
+	if((* p_startIndex) == textWidth) {
+		(* p_startIndex) = 0;
+		(* p_width) = 0;
+		(* p_offset) = 8;
+	}
+	
+	uint8_t temp[C1294_ROWS][C1294_COLS];
+	for(int x = 0; x < C1294_COLS; x++) {
+		for(int y = 0; y < C1294_ROWS; y++) {
+			if(x > (* p_width) + (* p_offset) || x < (* p_offset)) temp[y][x] = 0;
+			else {
+				uint8_t textArray_x = (* p_startIndex) + x - (* p_offset);
+				temp[y][x] = textArray[(C1294_ROWS) * textArray_x + y];
+			}
+		}
+	}
+	
+	c1294_display_2darray_8x8(temp);
+}
+
+
+void c1294_display_number(uint8_t number) {
+
+}
+
+void c1294_display_character(char character) {
+	if(character >= 0x41 && character <= 0x46) {
+		c1294_display_1darray_8x8(data[character - 0x41]);
+	}
+}

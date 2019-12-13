@@ -69,9 +69,38 @@ void c1294_display_clear(void);
 /// <param name="intensity">The intensity of the luminance.</param>
 void c1294_set_intensity(uint8_t intensity);
 
-void c1294_display_1darray_8x8(uint8_t* array);
+void c1294_display_1darray_8x8(uint8_t array[C1294_COLS]);
 
-void c1294_display_2darray_8x8(uint8_t array[C1294_ROWS][C1294_COLS]);
+
+/// <summary>Display a running text, which runs from the right to the left side of the LED matrix.</summary>
+/// <remarks>
+/// Dims the display. The luminance is determined by the formula
+/// 2*intensity+1/32. Intensity ranges from 0 to 15. Please refer
+/// to page 9 of the data sheet for the details.
+/// </remarks>
+/// <param name="textArray">An array, which contains the whole text to display. The array is accessed with [C1294_ROWS * x + y]</param>
+/// <param name="startIndex">The index in textArray of the first column to display. Before this function is called the first time, this value must be set to 0. Afterwards, it must not change any more.</param>
+/// <param name="width">Before this function is called the first time, this value must be set to 0. Afterwards, it must not change any more.</param>
+/// <param name="offset">Before this function is called the first time, this value must be set to 8. Afterwards, it must not change any more.</param>
+void c1294_display_running_text(uint8_t textWidth, uint8_t* textArray, uint8_t* startIndex, uint8_t* width, uint8_t* offset);
+
+/// <summary>Display a number.</summary>
+/// <remarks>
+/// Displays a number by transmitting the corresponding pattern
+/// to the controller. Just one digit can be displayed.
+/// </remarks>
+/// <param name="number">The number to be displayed.</param>
+void c1294_display_number(uint8_t number);
+
+/// <summary>Display a character.</summary>
+/// <remarks>
+/// Displays a character by transmitting the corresponding pattern
+/// to the controller. All printable ASCII signs can be specified.
+/// </remarks>
+/// <param name="character">The character to be displayed.</param>
+void c1294_display_character(char character);
+
+	
 
 
 #endif /* C1294_H_ */
