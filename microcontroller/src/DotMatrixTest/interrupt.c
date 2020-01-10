@@ -2,7 +2,7 @@
  * interrupt.c
  *
  * Created: 15.11.2019 11:11:52
- *  Author: Tobias
+ * Author: Tobias Kathan
  */ 
 
 #include "interrupt.h"
@@ -11,7 +11,7 @@
 #include <avr/interrupt.h>
 #include "board.h"
 
-int8_t activeState = DISPLAY_RUNNING_TEXT; //Text beginnt mit dem bewegten Text
+int8_t activeState = DISPLAY_RUNNING_TEXT; // beginnt mit dem bewegten Text
 
 void interrupt_init(void)
 {
@@ -33,14 +33,14 @@ void interrupt_init(void)
 	sei();
 }
 
-	int8_t getActiveStatus() {
-		return activeState;
-	}	
+int8_t getActiveStatus() {
+	return activeState;
+}	
 	
 ISR(PORTD_INT0_vect){
 	if(!(BUTTON_LOW_PORT.IN & BUTTON0_PIN_bm))
 	{
-		activeState = DISPLAY_CHARACTERS;
+		activeState = DISPLAY_RUNNING_TEXT;
 	}
 	
 	if(!(BUTTON_LOW_PORT.IN & BUTTON1_PIN_bm))
@@ -50,7 +50,7 @@ ISR(PORTD_INT0_vect){
 	
 	if(!(BUTTON_LOW_PORT.IN & BUTTON2_PIN_bm))
 	{
-		activeState = DISPLAY_RUNNING_TEXT;
+		activeState = DISPLAY_CHARACTERS;
 	}
 	
 	if(!(BUTTON_LOW_PORT.IN & BUTTON3_PIN_bm))

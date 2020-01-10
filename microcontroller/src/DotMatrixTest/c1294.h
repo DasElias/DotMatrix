@@ -16,7 +16,8 @@
 
 #ifndef C1294_H_
 #define C1294_H_
-#include "spi.h"
+
+#include <stdint.h>
 
 #define C1294_COLS 8
 #define C1294_ROWS 8

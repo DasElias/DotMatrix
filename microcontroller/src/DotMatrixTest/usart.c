@@ -2,7 +2,7 @@
  * usart.c
  *
  * Created: 15.11.2019 10:45:08
- *  Author: Fabio Curman
+ * Author: Fabio Curman
  */ 
 
 #include <avr/io.h>
@@ -50,6 +50,7 @@ volatile uint8_t ctr = 0;
 ISR(USB_USART_RXC_vect){
 	writeBuffer[ctr] = USB_USART_MODULE.DATA;
 	ctr++;
+	
 	if(ctr >= USART_AMOUNT_OF_BYTES) {
 		ctr = 0;
 		volatile uint8_t* temp = writeBuffer;
